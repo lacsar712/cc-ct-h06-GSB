@@ -7,6 +7,7 @@ from ninja.errors import HttpError
 
 from desk.auth_utils import bearer_auth, create_access_token, verify_password
 from desk.models import OffsetSubmission, User
+from desk.services import verdict_reason
 
 api = NinjaAPI(title="数控刀补复核台", version="1.0")
 
@@ -44,9 +45,8 @@ class SubmissionOut(Schema):
 
 
 def _to_out(row: OffsetSubmission) -> SubmissionOut:
-    from desk.h06_extra_trap import on_detail, on_list
-    verdict = on_list(row.verdict or "")
-    note = on_detail(row.tool_code, row.offset_um, row.verdict or "")
+    verdict = row.verdict or ""
+    note = verdict_reason(row.tool_code, row.offset_um, verdict) if verdict else ""
     return SubmissionOut(
         id=row.id,
         tool_code=row.tool_code,

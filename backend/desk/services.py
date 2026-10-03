@@ -10,9 +10,17 @@ def evaluate_verdict(offset_um: int) -> str:
     return OffsetSubmission.Verdict.FAIL
 
 
+def verdict_reason(tool_code: str, offset_um: int, verdict: str) -> str:
+    tol = settings.OFFSET_TOLERANCE_UM
+    if verdict == OffsetSubmission.Verdict.PASS:
+        return f"{tool_code} {offset_um}µm 在 ±{tol}µm 公差内，判定合格"
+    if verdict == OffsetSubmission.Verdict.FAIL:
+        return f"{tool_code} {offset_um}µm 超出 ±{tol}µm 公差，判定超差"
+    return f"{tool_code} {offset_um}µm 待复核"
+
+
 def apply_verdict(submission: OffsetSubmission) -> None:
-    from desk.h06_extra_trap import on_save
-    submission.verdict = on_save(evaluate_verdict(submission.offset_um))
+    submission.verdict = evaluate_verdict(submission.offset_um)
     submission.status = OffsetSubmission.Status.DONE
     submission.reviewed_at = timezone.now()
     submission.save(

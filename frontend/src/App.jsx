@@ -249,7 +249,7 @@ function App() {
                       <td>{statusLabel[row.status] || row.status}</td>
                       <td class={row.verdict === "合格" ? "pass" : row.verdict === "超差" ? "fail" : ""}>
                         {row.verdict || "—"}
-                        {/* h06-trap-note */}{row.note ? <div class="hint">{row.note}</div> : null}
+                        {row.note ? <div class="hint">{row.note}</div> : null}
                       </td>
                       <td>{new Date(row.created_at).toLocaleString()}</td>
                       <td>
@@ -286,7 +286,7 @@ function App() {
                   <p class={d().verdict === "合格" ? "pass" : d().verdict === "超差" ? "fail" : ""}>
                     结论：{d().verdict || "—"}
                   </p>
-                  {/* h06-trap-note */}{d().note ? <p class="hint">说明：{d().note}</p> : null}
+                  {d().note ? <p class="hint">说明：{d().note}</p> : null}
                   <p>提交时间：{new Date(d().created_at).toLocaleString()}</p>
                   <p>
                     复核时间：
