@@ -44,9 +44,9 @@ class SubmissionOut(Schema):
 
 
 def _to_out(row: OffsetSubmission) -> SubmissionOut:
-    from desk.h06_extra_trap import on_detail, on_list
-    verdict = on_list(row.verdict or "")
-    note = on_detail(row.tool_code, row.offset_um, row.verdict or "")
+    # 列表话术与详情说明直接取库内真判定，结论、理由、色块同向可对拍。
+    verdict = row.verdict or ""
+    note = f"{row.tool_code} {row.offset_um}µm {verdict}" if verdict else ""
     return SubmissionOut(
         id=row.id,
         tool_code=row.tool_code,

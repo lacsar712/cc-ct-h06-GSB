@@ -11,8 +11,8 @@ def evaluate_verdict(offset_um: int) -> str:
 
 
 def apply_verdict(submission: OffsetSubmission) -> None:
-    from desk.h06_extra_trap import on_save
-    submission.verdict = on_save(evaluate_verdict(submission.offset_um))
+    # 真判定直接落库：库字段、列表、详情、色块同一份结论，不做任何改写。
+    submission.verdict = evaluate_verdict(submission.offset_um)
     submission.status = OffsetSubmission.Status.DONE
     submission.reviewed_at = timezone.now()
     submission.save(
